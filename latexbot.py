@@ -12,6 +12,7 @@ import re
 from sympy import preview
 from flask import Flask, request, abort, send_file
 
+# pylint: disable=invalid-name
 app = Flask(__name__)
 app.config.from_pyfile('latexbot.cfg')
 
