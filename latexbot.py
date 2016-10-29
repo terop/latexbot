@@ -41,7 +41,7 @@ def index():
         mode = app.config['OUTPUT_MODE']
 
     if 'render' not in request.args:
-        abort(400)
+        abort(404)
 
     # Hack to generate a temporary filename
     with NamedTemporaryFile(dir='/tmp', prefix='latexbot_', suffix='.png', delete=True) as tmpfile:
@@ -49,18 +49,30 @@ def index():
 
     if mode == 'link':
         if not render(request.args['render'], mode, image_name=tmpfile_name):
-            abort(400)
+            abort(404)
 
-        return '{}get/{}'.format(request.url_root,
-                                 re.search(r'latexbot_(\w+)\.png',
-                                           basename(tmpfile_name)).group(1))
+        return '{}image/{}'.format(request.url_root,
+                                   re.search(r'latexbot_(\w+)\.png',
+                                             basename(tmpfile_name)).group(1))
     else:
         out_buffer = BytesIO()
         if not render(request.args['render'], mode, output_buffer=out_buffer):
-            abort(400)
+            abort(404)
 
         out_buffer.seek(0)
         return send_file(out_buffer, mimetype='image/png')
+
+
+@app.route('/image/<image_id>', methods=['GET'])
+def get_image(image_id):
+    """Returns the image referred by the given ID."""
+    try:
+        image = open('/tmp/latexbot_{}.png'.format(image_id), 'rb')
+    except FileNotFoundError:
+        print('Tried to access non-existent image: {}'.format(image_id),
+              file=sys.stderr)
+        abort(404)
+    return send_file(image, mimetype='image/png')
 
 
 if __name__ == '__main__':
