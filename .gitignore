@@ -4,3 +4,4 @@ lib/
 lib64
 pip-selfcheck.json
 share/
+__pycache__/
