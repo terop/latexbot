@@ -50,7 +50,7 @@ def index():
 
     if mode == 'link':
         if not render(request.args['render'], mode, image_name=tmpfile_name):
-            abort(404)
+            abort(500)
 
         return '{}image/{}'.format(request.url_root,
                                    re.search(r'latexbot_(\w+)\.png',
@@ -58,7 +58,7 @@ def index():
     else:
         out_buffer = BytesIO()
         if not render(request.args['render'], mode, output_buffer=out_buffer):
-            abort(404)
+            abort(500)
 
         out_buffer.seek(0)
         return send_file(out_buffer, mimetype='image/png')
