@@ -10,7 +10,7 @@ from os.path import basename
 import re
 
 from sympy import preview
-from flask import Flask, request, abort, send_file
+from flask import Flask, request, abort, send_file, make_response
 
 # pylint: disable=invalid-name
 app = Flask(__name__)
@@ -27,7 +27,7 @@ def render(latex_source, mode, image_name=None, output_buffer=None):
             preview(latex_source, euler=False, output='png', viewer='BytesIO',
                     outputbuffer=output_buffer)
     except RuntimeError as err:
-        print('Got Latex error: {}'.format(err), file=sys.stderr)
+        print('Got a Latex error: {}'.format(err), file=sys.stderr)
         return False
     return True
 
@@ -42,7 +42,7 @@ def index():
         mode = app.config['OUTPUT_MODE']
 
     if 'render' not in request.args:
-        abort(404)
+        return make_response('The input to render was not provided', 404)
 
     # Hack to generate a temporary filename
     with NamedTemporaryFile(dir='/tmp', prefix='latexbot_', suffix='.png', delete=True) as tmpfile:
@@ -50,7 +50,7 @@ def index():
 
     if mode == 'link':
         if not render(request.args['render'], mode, image_name=tmpfile_name):
-            abort(500)
+            return make_response('Internal server error, please check input validity', 500)
 
         return '{}image/{}'.format(request.url_root,
                                    re.search(r'latexbot_(\w+)\.png',
@@ -58,7 +58,7 @@ def index():
     else:
         out_buffer = BytesIO()
         if not render(request.args['render'], mode, output_buffer=out_buffer):
-            abort(500)
+            return make_response('Internal server error, please check input validity', 500)
 
         out_buffer.seek(0)
         return send_file(out_buffer, mimetype='image/png')
