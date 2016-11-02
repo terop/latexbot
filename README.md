@@ -5,7 +5,7 @@ an image. Currently only short (one line) snippets are supported. The output is
 either the image itself or a link to the image containing rendered LaTeX source.
 The output type can be specified in two ways:
 
-* `OUTPUT_MODE` in `latexbot.cfg`, default value: link
+* `OUTPUT_MODE` in `latexbot.cfg`, default value: image
 * `mode` request argument, values: link or image
 If `mode` is not provided, the value from `latexbot.cfg` is used.
 
