@@ -52,9 +52,11 @@ def index():
         if not render(request.args['render'], mode, image_name=tmpfile_name):
             return make_response('Internal server error, please check input validity', 500)
 
-        return '{}image/{}'.format(request.url_root,
-                                   re.search(r'latexbot_(\w+)\.png',
-                                             basename(tmpfile_name)).group(1))
+        return '{}{}image/{}'.format(request.url_root,
+                                     '{}/'.format(app.config['EXTRA_URL_PATH'])
+                                     if app.config['EXTRA_URL_PATH'] != '' else '',
+                                     re.search(r'latexbot_(\w+)\.png',
+                                               basename(tmpfile_name)).group(1))
     else:
         out_buffer = BytesIO()
         if not render(request.args['render'], mode, output_buffer=out_buffer):
