@@ -10,7 +10,7 @@ from os.path import basename
 import re
 
 from sympy import preview
-from flask import Flask, request, abort, send_file, make_response
+from flask import Flask, request, abort, send_file, make_response, render_template
 
 # pylint: disable=invalid-name
 app = Flask(__name__)
@@ -77,6 +77,12 @@ def get_image(image_id):
               file=sys.stderr)
         abort(404)
     return send_file(image, mimetype='image/png')
+
+
+@app.route('/input', methods=['GET'])
+def input_form():
+    """Render an input form."""
+    return render_template('input.html')
 
 
 if __name__ == '__main__':
