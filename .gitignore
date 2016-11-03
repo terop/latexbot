@@ -5,3 +5,6 @@ lib64
 pip-selfcheck.json
 share/
 __pycache__/
+GPATH
+GRTAGS
+GTAGS
