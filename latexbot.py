@@ -42,7 +42,8 @@ def index():
         mode = app.config['OUTPUT_MODE']
 
     if 'render' not in request.args:
-        return make_response('The input to render was not provided', 404)
+        return make_response('The input to render was not provided. Use the '
+                             '"render" query argument.', 404)
 
     # Hack to generate a temporary filename
     with NamedTemporaryFile(dir='/tmp', prefix='latexbot_', suffix='.png', delete=True) as tmpfile:
