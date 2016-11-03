@@ -36,21 +36,23 @@ def render(latex_source, mode, image_name=None, output_buffer=None):
 @app.route('/', methods=['GET'])
 def index():
     """Index route."""
+    return render_template('index.html')
+
+
+@app.route('/render/<latex_input>', methods=['GET'])
+def render_url_input(latex_input):
+    """Render the provided LaTeX input."""
     if 'mode' in request.args:
         mode = request.args['mode']
     else:
         mode = app.config['OUTPUT_MODE']
-
-    if 'render' not in request.args:
-        return make_response('The input to render was not provided. Use the '
-                             '"render" query argument.', 404)
 
     # Hack to generate a temporary filename
     with NamedTemporaryFile(dir='/tmp', prefix='latexbot_', suffix='.png', delete=True) as tmpfile:
         tmpfile_name = tmpfile.name
 
     if mode == 'link':
-        if not render(request.args['render'], mode, image_name=tmpfile_name):
+        if not render(latex_input, mode, image_name=tmpfile_name):
             return make_response('Internal server error, please check input validity', 500)
 
         return '{}{}image/{}'.format(request.url_root,
@@ -60,7 +62,7 @@ def index():
                                                basename(tmpfile_name)).group(1))
     else:
         out_buffer = BytesIO()
-        if not render(request.args['render'], mode, output_buffer=out_buffer):
+        if not render(latex_input, mode, output_buffer=out_buffer):
             return make_response('Internal server error, please check input validity', 500)
 
         out_buffer.seek(0)
