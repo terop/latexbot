@@ -21,9 +21,12 @@ There are (at least) two ways to run this application:
 approximately 1.1 GB. The only benefit is that a LaTeX (Tex Live) distribution is
 included in the image.
 * Using a WSGI server. This is the preferred alternative. Basically any WSGI
-compatible is okay. _Important_ note about _dependencies_: a LaTeX distribution needs
-to be available. Tex Live 2014 and later are known to work. An example with the
-Gunicorn WSGI server: `gunicorn --bind 0.0.0.0:5001 -w 2 latexbot:app`.
+compatible is okay. An example with the Gunicorn WSGI server:
+`gunicorn --bind 0.0.0.0:5001 -w 2 latexbot:app`.
+_Important_ note about _dependencies_: a LaTeX distribution with the `preview`
+package needs to be available. On Debian this needs to be installed separately
+from the `preview-latex-style` package. Regarding LaTeX distributions: Tex Live
+2014 and later are known to work.
 
 ## License
 
