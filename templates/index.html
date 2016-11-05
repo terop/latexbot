@@ -18,9 +18,31 @@
                 be properly encoded!
                 <br>
                 Request arguments: "mode" defines the output format, values: image or link.</li>
-            <li><a href="input">/input</a>: a page with a form for longer inputs. Image and link output formats
-                are supported.</li>
+                <li><a href="input">/input</a>: a page with a form for longer inputs. Image and link output
+                    formats are supported.</li>
         </ul>
 
+        <br>
+        <h4>Input encoding for /render</h4>
+        <input type="text" id="encode-input" size="80"><br>
+        <input type="button" id="encode-button" value="Encode">
+        <br><br>
+        Encoded text: <span id="encode-output"></span>
+        <br>
+        Render link: <a id="render-link" style="display: none;" href="">
+            /render/<span id="render-input"></span></a>
+
+        <script type="text/javascript">
+            document.getElementById('encode-button').addEventListener(
+                'click',
+                function () {
+                    encoded = encodeURIComponent(document.getElementById('encode-input').value);
+
+                    document.getElementById('encode-output').innerText = encoded;
+                    document.getElementById('render-link').href = 'render/' + encoded;
+                    document.getElementById('render-input').innerText = encoded;
+                    document.getElementById('render-link').style.display = 'inline';
+                }, false);
+        </script>
     </body>
 </html>
