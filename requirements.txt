@@ -1,2 +1,3 @@
 sympy
 Flask
+Jinja2

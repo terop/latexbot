@@ -1,7 +1,7 @@
 # latexbot
 
-The latexbot is small Web application which renders the provided LaTeX source as
-an image. Currently only short (one line) snippets are supported. The output is
+The latexbot is small Web application which renders the provided LaTeX source to
+an image. Support for "one-line" and longer input is available. The output is
 either the image itself or a link to the image containing rendered LaTeX source.
 The output type can be specified in two ways:
 
